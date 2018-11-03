@@ -1,0 +1,9 @@
+﻿Henryk Sienkiewicz;Vuo Vadis;55,9;NArrow.gif
+Bolesław Prus;Lalka;33;SArrow.gif
+Władysław Reymont;Chłopi;44,49;rodo.png
+Jan Kochanowski;Treny;34;""
+Jan Brzechwa;Akademia Pana Kleksa;22;""
+Julian Tuwim;Lokomotywa;19,90;""
+Julian Tuwim;;18,49;""
+Jan Brzechwa;Pan Maluszkiewicz;14,99;""
+Jerzy Sapkowski;Wiedźmin i jego wiedźmy;34,99;""
