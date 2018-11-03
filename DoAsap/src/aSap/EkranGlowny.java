@@ -56,8 +56,8 @@ public class EkranGlowny implements ActionListener {
 		eg = new JFrame("ASap - Lista Postępowań");
 		x=0;
 		y=0;
-		width = dane.getColumnCount()*100;
-		height=	dane.getRowCount()*20+150;	
+		width = dane.getColumnCount()*110;
+		height=	dane.getRowCount()*5+150;	
 		eg.setSize(width, height);
 		//JTextArea ta = new JTextArea(); //?? do czego to? wywalić
 		/*

@@ -22,12 +22,11 @@ public class SingleFieldValidator {
 		int i = model.getColumnPosition(fieldName);
 		this.colPosition=i;
 		this.o = model.getMatrix();
-		for (Object[] el: o)	{
-			
-			if (el[i]==null) el[i] = "";
+		
+		for (Object[] el: o)	{//do czego to służy?	
+			if (el[i]==null) el[i] = "";//tu na pewno zastępuje nula pustym stringiem, co jest potrzebne
 			//colData[i]=(String) el[i];
-			System.out.println(el[i]);
-			
+			//System.out.println(el[i]);
 		}
 		
 		
@@ -94,19 +93,25 @@ public class SingleFieldValidator {
 		}
 		public void checkFormat(String field)	{
 			if (field.length()>=13)	{
-			String fstPart = field.substring(0, 2);
+			String fstPart = field.substring(0, 3);
 			//char a = field.charAt(2);
-			String sndPart = field.substring(3, 5);
-			String trdPart = field.substring(6,12);
+			String sndPart = field.substring(3, 6);
+			String trdPart = field.substring(6,13);
+			
+			System.out.println("1st "+fstPart);
+			System.out.println("2nd "+sndPart);
+			System.out.println("3rd "+trdPart);
+			
 			
 			if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
-			else valOrg(false,"nieprawidłowy format numeru");
+			
+			else valOrg(false,"nieprawidłowy format numeru_1");
 			
 			if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) valOrg(true,"");
-			else valOrg(false,"nieprawidłowy format numeru");
+			else valOrg(false,"nieprawidłowy format numeru_2");
 			
-			if(trdPart.matches("[0-9]")) valOrg(true,"");
-			else valOrg(false,"nieprawidłowy format numeru");
+			if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
+			else valOrg(false,"nieprawidłowy format numeru_3");
 			}
 			
 			
