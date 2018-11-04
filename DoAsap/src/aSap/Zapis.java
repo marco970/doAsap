@@ -35,7 +35,7 @@ public class Zapis {
 			row[j]=singleRow;
 			//saveFile("F:/aSapData/current_test.txt", row);
 		}
-		writeFile("F:/aSapData/Current3.txt", row);
+		writeFile(model.getPath(), row);
 		
 	}
 	

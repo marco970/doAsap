@@ -92,16 +92,18 @@ public class SingleFieldValidator {
 			}
 		}
 		public void checkFormat(String field)	{
+			//dla PZ trzeba zmodyfikować...
 			if (field.length()>=13)	{
 			String fstPart = field.substring(0, 3);
 			//char a = field.charAt(2);
 			String sndPart = field.substring(3, 6);
 			String trdPart = field.substring(6,13);
 			
+			/*
 			System.out.println("1st "+fstPart);
 			System.out.println("2nd "+sndPart);
 			System.out.println("3rd "+trdPart);
-			
+			*/
 			
 			if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
 			
@@ -113,8 +115,6 @@ public class SingleFieldValidator {
 			if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
 			else valOrg(false,"nieprawidłowy format numeru_3");
 			}
-			
-			
 			
 		}
 		//EoMetodyWalidacyjne	

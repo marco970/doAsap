@@ -8,10 +8,10 @@ import java.lang.reflect.Field;
  */
 
 public class ValidatioModel {
-	 String[] ZZ = {"checkFormat","toShort", "notNull"};
-	 String[] PZ = {"toShort"};
-	 String[] WP = {"toShort"};
-	 String[] DK = {"toShort"};
+	 String[] ZZ = {"doesExist","checkFormat","toShort", "notNull"};
+	 String[] PZ = {"doesExist","checkFormat","toShort"};
+	 String[] WP = {"doesExist","checkFormat","toShort"};
+	 String[] DK = {"doesExist","checkFormat","toShort"};
 	
 	public ValidatioModel()	{}
 	

@@ -40,6 +40,9 @@ public class MainTableModel extends AbstractTableModel {
 	}
 	//----------metody--
 
+	public String getPath()	{
+		return current;
+	}
 	public Object[][] getMatrix()	{
 		return dane;
 	}
