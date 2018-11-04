@@ -28,7 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
-public class OpForm1 implements ActionListener, FocusListener {
+public class OpForm2 implements ActionListener, FocusListener {
 
 	private int colCount;
 	private MainTableModel model;
@@ -42,7 +42,7 @@ public class OpForm1 implements ActionListener, FocusListener {
 	
 	JFrame opForm;
 
-	public OpForm1(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
+	public OpForm2(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
 		
 		errMessage = new ErrMessage(mod);
 		String[] errMessageStr = errMessage.getErrMessage();
