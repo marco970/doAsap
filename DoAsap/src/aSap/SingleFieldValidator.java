@@ -93,23 +93,12 @@ public class SingleFieldValidator {
 			}
 		}
 		public void checkFormat(String field)	{
-			//dla PZ trzeba zmodyfikować...
 			if (field.length()>=13)	{
 			String fstPart = field.substring(0, 3);
-			//char a = field.charAt(2);
 			String sndPart = field.substring(3, 6);
 			String trdPart = field.substring(6,13);
-			
-			/*
-			System.out.println("1st "+fstPart);
-			System.out.println("2nd "+sndPart);
-			System.out.println("3rd "+trdPart);
-			*/
-			
 			if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
-			
 			else valOrg(false,"nieprawidłowy format numeru_1");
-			
 			if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
 				valOrg(true,"");
 				spolka=sndPart;
@@ -129,8 +118,6 @@ public class SingleFieldValidator {
 		if (errMessage.equals(""))	errMessage = errMsg;
 	}
 	public String getSpolka()	{
-		//System.out.println("2nd "+spolka);
-		///if (spolka.equals(null)) spolka = "PLK";
 		return spolka;
 	}
 	

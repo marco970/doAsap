@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +27,6 @@ import net.miginfocom.swing.MigLayout;
 public class NewForm implements  ActionListener, FocusListener {
 	
 	private MainTableModel model;
-	private int rowNr;
 	private JFrame newFrame;
 	private JPanel contentPane;		//bo potrzebujemy tego w metodach
 	private JPanel panel;			//jw
@@ -35,10 +34,13 @@ public class NewForm implements  ActionListener, FocusListener {
 	private JLabel poleZZlab;
 	private JLabel errZZLab;
 	private JLabel spolkaPole;
-	
-	boolean[] draw = {false, false, false, false, false, false, false}; 
-	HashMap drawMap = new HashMap();
-	ArrayList<Component> listaComp = new ArrayList<Component>(); //lista komponentów do visible
+	private JLabel statusPole;
+	private JTextArea przedmiotTa;
+	private JTextField dostawcaPole;
+	private JTextField nazwaPole ;
+	private JComboBox trybPole;
+
+	private ArrayList<Component> listaComp = new ArrayList<Component>(); //lista komponentów do visible
 	
 	//przyciski
 	private JButton btnSave = new JButton("Zapisz");
@@ -49,7 +51,6 @@ public class NewForm implements  ActionListener, FocusListener {
 	public NewForm(int rowNr, MainTableModel mod)	{
 		
 		this.model = mod;
-		this.rowNr = rowNr;
 		//ramka
 		newFrame = new JFrame("Nowy ZZ");
 		newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -98,14 +99,14 @@ public class NewForm implements  ActionListener, FocusListener {
 		//dodać status 
 		JLabel statusPolelab = new JLabel(model.getColumnName(4));
 		listaComp.add(statusPolelab);
-		JLabel statusPole = new JLabel("open");
+		statusPole = new JLabel("open");
 		listaComp.add(statusPole);
 		panel.add(statusPolelab,"cell 0 2");
 		panel.add(statusPole,"cell 1 2");
 		//dodać przedmiot
 		JLabel przemiotPolelab = new JLabel(model.getColumnName(5));
 		listaComp.add(przemiotPolelab);
-		JTextArea przedmiotTa = new JTextArea(3,15);
+		przedmiotTa = new JTextArea(5,15);
 		JScrollPane scrl = new JScrollPane(przedmiotTa);
 		listaComp.add(scrl);
 		panel.add(przemiotPolelab,"cell 0 3");
@@ -113,14 +114,14 @@ public class NewForm implements  ActionListener, FocusListener {
 		//dodać dostawca
 		JLabel dostawcaPolelab = new JLabel(model.getColumnName(6));
 		listaComp.add(dostawcaPolelab);
-		JTextField dostawcaPole = new JTextField(15);
+		dostawcaPole = new JTextField(15);
 		listaComp.add(dostawcaPole);
 		panel.add(dostawcaPolelab,"cell 0 4");
 		panel.add(dostawcaPole,"cell 1 4");
 		//dodać nazwę 
 		JLabel nazwaPolelab = new JLabel(model.getColumnName(7));
 		listaComp.add(nazwaPolelab);
-		JTextField nazwaPole = new JTextField(15);
+		nazwaPole = new JTextField(15);
 		listaComp.add(nazwaPole);
 		panel.add(nazwaPolelab,"cell 0 5");
 		panel.add(nazwaPole,"cell 1 5");
@@ -128,7 +129,7 @@ public class NewForm implements  ActionListener, FocusListener {
 		JLabel trybPolelab = new JLabel(model.getColumnName(8));
 		listaComp.add(trybPolelab);
 		String[] tryby = {"przetarg", "z wolnej ręki", "inne"};
-		JComboBox trybPole = new JComboBox<>(tryby);
+		trybPole = new JComboBox<>(tryby);
 		listaComp.add(trybPole);
 		panel.add(trybPolelab,"cell 0 6");
 		panel.add(trybPole,"cell 1 6");
@@ -158,32 +159,14 @@ public class NewForm implements  ActionListener, FocusListener {
 		p.remove(removed);
 		p.add(added,migTarget);
 	}
-	public void addOneTime(Component a, int indexColName, JPanel p, int migRow)	{ //jeszcze zobaczymy, czy się przyda
-		Component[] componentArray = p.getComponents();
-		boolean check = false;
-		/*
-		for (Component el: componentArray)	{
-			if(!el.equals(a)) check = true;
-			System.out.println("---"+el.toString());
-		}
-		System.out.println(check+">>>"+a.toString());
-		*/
-		if(!panel.isAncestorOf(a))	{
-			p.add(new JLabel(model.getColumnName(indexColName)), "cell 0 "+migRow+"");
-			p.add(a, "cell 1 "+migRow+"");
-		}
-		//if(!panel.isAncestorOf(a)) System.out.println("&&&"+a.toString());
-	}
-	
 	
 	@Override
 	public void focusGained(FocusEvent eFg) {
 		btnNext.setEnabled(true);
 		btnNext.setText("Dalej");
-		btnSave.setEnabled(false);
-		
+		btnSave.setEnabled(false);	
 	}
-
+	//obsługa zdarzeń
 	@Override
 	public void focusLost(FocusEvent eFg) {
 		String gotZZ = poleZZ.getText();
@@ -191,31 +174,18 @@ public class NewForm implements  ActionListener, FocusListener {
 		SingleFieldValidator zzVal = new SingleFieldValidator("ZZ", gotZZ, model);
 		errZZLab.setText(zzVal.getErrMessage());
 		if (!zzVal.getValidationResult())	{//jeśli walidacja negatywna
-			//errZZLab.setText(zzVal.getErrMessage());
 			btnNext.setEnabled(false);
 			poleZZ.requestFocus();
-			//btnNext.setText("Cofnij");
-			//System.out.println("asd"+zzVal.getErrMessage());
-			//errZZLab.setText("asd"+zzVal.getErrMessage());
-			
 		}
 		else {
-			//errZZLab.setText("");
 			btnNext.setEnabled(false);
 			poleZZlab.setText(gotZZ);
 			elReplace(poleZZlab, poleZZ, panel, "cell 1 1");
-			//System.out.println("asd"+zzVal.getSpolka());
 			spolkaPole.setText(zzVal.getSpolka());
-			//JLabel poleStatlab = new JLabel("open");
-			//addOneTime(new JLabel("open"), 4, panel, 2);
-			//panel.add(new JLabel(model.getColumnName(4)),"cell 0 2");
-			//panel.add(poleStatlab,"cell 1 2");
 			makeThemVisible(true);
 			btnSave.setEnabled(true);
 			btnBack.setVisible(true);
 		}
-
-
 	}
 
 	@Override
@@ -224,22 +194,36 @@ public class NewForm implements  ActionListener, FocusListener {
 		if(command.equals("Anuluj"))	{
 			newFrame.setVisible(false);
 		}
-		//if(command.equals("Cofnij"))	poleZZ.requestFocus();
 		if(command.equals("Powrót"))	{
 			btnBack.setVisible(false);
 			poleZZ.setText(poleZZ.getText());
 			elReplace(poleZZ, poleZZlab, panel, "cell 1 1");
 			poleZZ.requestFocus();
-			//dodać status 
-
-			//dodać przedmiot
-			
-			//dodać dostawca
-			//dodać nazwę 
-			//dodać spółkę
-			
-			
+		}
+		if(command.equals("Zapisz"))	{
+			String[] savedRow = new String[model.getColumnCount()];
+		    Date currentDate = new Date();
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss");
+		    String dateString = dateFormat.format(currentDate);
+		    System.out.println(model.getColumnCount());
+			for (int i=0; i<=model.getColumnCount()-1; i++)	{
+				if (i == 0)	savedRow[i] = poleZZ.getText();
+				else if(i==4) savedRow[i] = statusPole.getText();
+				else if(i==5) savedRow[i] = przedmiotTa.getText();
+				else if(i==6) savedRow[i] = dostawcaPole.getText();
+				else if(i==7) savedRow[i] = nazwaPole.getText();
+				else if(i==8) savedRow[i] = (String) trybPole.getSelectedItem();
+				else if(i==9) savedRow[i] = spolkaPole.getText();
+				else if(i==10) savedRow[i] = dateString;
+				else savedRow[i] = "";
+			}
+			model.recordAdd(savedRow);
+			try {
+				new Zapis(model);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			newFrame.setVisible(false);
 		}
 	}
-
 }

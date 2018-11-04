@@ -182,7 +182,7 @@ public class EkranGlowny implements ActionListener {
 			new NewForm(data.getRowCount()+1, data);
 		}
 		if (u.equals(sort[1]))	{
-			System.out.println("sort teraz "+u);
+			//System.out.println("sort teraz "+u);
 		    filter = new RowFilter<Object, Object>() {
 			      public boolean include(Entry entry) {
 			        String status = (String) entry.getValue(4);
@@ -196,7 +196,7 @@ public class EkranGlowny implements ActionListener {
 
 		}
 		if (u.equals(sort[2]))	{
-			System.out.println("sort teraz "+u);
+			//System.out.println("sort teraz "+u);
 		    filter = new RowFilter<Object, Object>() {
 			      public boolean include(Entry entry) {
 			        String status = (String) entry.getValue(4);
@@ -212,6 +212,7 @@ public class EkranGlowny implements ActionListener {
 		if (u.equals(popupStr[0]))	{
 			int selectedRow = lista.getSelectedRow();
 			int realSelectedRow = lista.convertRowIndexToModel(selectedRow);
+
 			new OpForm1("Edycja postępowania", realSelectedRow, data, errMS);
 			
 			//System.out.println(" to ma być " + popupStr[0] + lista.getSelectedRow() );

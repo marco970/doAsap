@@ -34,7 +34,6 @@ public class OpForm1 implements ActionListener, FocusListener {
 	private MainTableModel model;
 	
 	private int rowNr;
-	//private ErrMessageShow errMS;
 	
 	private String[] validateArr;
 	private Object[] tfAll;
@@ -45,7 +44,6 @@ public class OpForm1 implements ActionListener, FocusListener {
 
 	public OpForm1(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
 		
-		//this.errMS = errMS;
 		errMessage = new ErrMessage(mod);
 		String[] errMessageStr = errMessage.getErrMessage();
 		errMessage.addPropertyChangeListener(errMS); //potrzebne?
@@ -65,7 +63,7 @@ public class OpForm1 implements ActionListener, FocusListener {
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		opForm.setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow]", "[grow][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow]", "[grow][][]"));//różnica
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, "cell 0 0,grow");
@@ -96,27 +94,35 @@ public class OpForm1 implements ActionListener, FocusListener {
 			nazwaPola[i] = new JLabel(model.getColumnName(i));
 			panel.add(nazwaPola[i], targetNazwaPola[i]);
 			if (i==4)	{
-				String[] strA5 = {"open","done","on hold"};
+				String[] strA5 = {"open","done","on hold"}; //do modelu
+				System.out.println(i+" - "+rowNr);
+				String defaultStatus = (String) model.getValueAt(rowNr, i);
 				JComboBox<String> a5 = (JComboBox<String>) new JComboBox<String>(strA5);
+				a5.setSelectedItem(defaultStatus);
 				a[i]=a5;
 				b[i]=a5;
 			}
 			else if (i==8)	{
-				String[] strA5 = {"przetarg","z wolnej ręki","renegocjacje"};
+				String[] strA5 = {"przetarg","z wolnej ręki","inne"};//ściągać z modelu
+				String defaultTryb = (String) model.getValueAt(rowNr, i);
 				JComboBox<String> a5 = new JComboBox<String>(strA5);
+				a5.setSelectedItem(defaultTryb);
 				a5.setName(model.getColumnName(i));
 				a[i]=a5;
 				b[i]=a5;
 			}
 			else if (i==9)	{
-				String[] strA5 = {"PLK","PLKI","CP"};
-				JComboBox<String> a5 = new JComboBox<String>(strA5);
+				//String[] strA5 = {"PLK","PLI","CPO"};
+				String defaultSpolka = (String) model.getValueAt(rowNr, i);
+				//JComboBox<String> a5 = new JComboBox<String>(strA5);
+				JLabel a5 = new JLabel(defaultSpolka);
+				//a5.setSelectedItem(defaultSpolka);
 				a5.setName(model.getColumnName(i));
 				a[i]=a5;
 				b[i]=a5;
 			}
 			else if (i==5)	{
-				JTextArea a5 = new JTextArea(5, 16);
+				JTextArea a5 = new JTextArea(5, 15);
 				JScrollPane scrl = new JScrollPane(a5);
 				a[i]=a5;
 				b[i]=scrl;
@@ -196,7 +202,7 @@ public class OpForm1 implements ActionListener, FocusListener {
 	    Date currentDate = new Date();
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss");
 	    String dateString = dateFormat.format(currentDate);
-	    System.out.println(colCount);
+	    //System.out.println(colCount);
 		Object[] savedRow = new Object[colCount];
 		String[] rowAll = new String[tfAll.length];
 		for (int i = 0; i <= colCount-1; i++)	{
@@ -263,21 +269,12 @@ public class OpForm1 implements ActionListener, FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		//System.out.println(((JTextComponent) e.getSource()).getText());
+		System.out.println(((JTextComponent) e.getSource()).getText());
 		
 		String odFocus = ((JTextComponent) e.getSource()).getText();
 		String odFocusName = e.getComponent().getName();
 		
-		String regEx = "[0-9]{1,6}";
-		Pattern pattern = Pattern.compile(regEx);
-		Matcher matcher = pattern.matcher(odFocus);
-		boolean match = matcher.matches();
-		if (match)	{
-			System.out.println(odFocusName+" pasuje");
-		}
-		else {
-			System.out.println(odFocusName+" nie pasuje");
-		}
+
 		
 	}
 }//koniec klasy
