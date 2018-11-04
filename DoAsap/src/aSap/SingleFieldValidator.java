@@ -12,8 +12,9 @@ public class SingleFieldValidator {
 	private MainTableModel model;
 	private String vendor="";
 	private String[] colData;
-	int colPosition;
-	Object[][] o;
+	private int colPosition;
+	private Object[][] o;
+	private String spolka;
 	
 	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model)	{
 		this.fieldName = fieldName;
@@ -109,7 +110,10 @@ public class SingleFieldValidator {
 			
 			else valOrg(false,"nieprawidłowy format numeru_1");
 			
-			if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) valOrg(true,"");
+			if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
+				valOrg(true,"");
+				spolka=sndPart;
+			}
 			else valOrg(false,"nieprawidłowy format numeru_2");
 			
 			if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
@@ -123,6 +127,11 @@ public class SingleFieldValidator {
 	public void valOrg(boolean val, String errMsg)	{
 		if (valDone) valDone = val;
 		if (errMessage.equals(""))	errMessage = errMsg;
+	}
+	public String getSpolka()	{
+		//System.out.println("2nd "+spolka);
+		///if (spolka.equals(null)) spolka = "PLK";
+		return spolka;
 	}
 	
 
