@@ -208,17 +208,15 @@ public class OpForm1 implements ActionListener, FocusListener {
 		for (int i = 0; i <= colCount-1; i++)	{
 			if (i<=colCount-1-liczbaDs)	{
 				if (i==4 || i==8 || i==9) {
-		    		rowAll[i]=((JComboBox<String>) tfAll[i]).getSelectedItem().toString();
-		    		//System.out.println(rowAll[i]);
+		    		rowAll[i]=(String) ((JComboBox<String>) tfAll[i]).getSelectedItem();
 		    	}
 		    	else	{
 		    		if (tfAll[i]==null)	{
 		    			rowAll[i]=" ";
 		    		}
 		    		else {
-		    		rowAll[i]= ((JTextComponent) tfAll[i]).getText();
+		    			rowAll[i]= ((JTextComponent) tfAll[i]).getText();
 		    		}
-		    		//System.out.println(rowAll[i]);
 		    	}
 				
 				savedRow[i]=rowAll[i];
