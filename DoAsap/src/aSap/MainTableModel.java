@@ -28,7 +28,9 @@ public class MainTableModel extends AbstractTableModel {
 	
 	
 	//private String current = "F:/aSapData/Current3.txt";
-	private String current = "D:/Documents/00_projekty/doAsapVer2/aSapData/Current3.txt";
+	//private String current = "D:/Documents/00_projekty/doAsapVer2/aSapData/Current3.txt";
+	private String current = "C:/Users/marcin.kuciak/Documents/workIT_projects/doAsap/aSapData/Current3.txt";
+	
 	private Object[][] dane = null;
 	
 	public MainTableModel() 	{
