@@ -92,7 +92,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 			targetField[i] = "cell 1 "+ i;
 			targetErrMessage[i] = "cell 2 "+ i; //out
 		}
-		JLabel[] errMessage = errMS.getErrMessageLab();
+		JLabel[] errMessage = errMS.getErrMessageLab();	//out
 		
 		
 		//rysujemy-----------------------------------
@@ -167,8 +167,8 @@ public class OpForm2 implements ActionListener, FocusListener {
 			}
 				
 			panel.add((Component) b[i], targetField[i]);
-			errMessage[i] = new JLabel(errMessageStr[i]);//--------!
-			panel.add(errMessage[i], targetErrMessage[i]);
+			errMessage[i] = new JLabel(errMessageStr[i]);//--------!//out
+			panel.add(errMessage[i], targetErrMessage[i]); //out
 			
 			errMessage[i].setHorizontalAlignment(SwingConstants.LEFT);
 			errMessage[i].setForeground(Color.RED);
