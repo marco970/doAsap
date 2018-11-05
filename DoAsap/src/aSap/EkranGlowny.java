@@ -213,7 +213,7 @@ public class EkranGlowny implements ActionListener {
 			int selectedRow = lista.getSelectedRow();
 			int realSelectedRow = lista.convertRowIndexToModel(selectedRow);
 
-			new OpForm1("Edycja postępowania", realSelectedRow, data, errMS);
+			new OpForm2("Edycja postępowania", realSelectedRow, data, errMS);
 			
 			//System.out.println(" to ma być " + popupStr[0] + lista.getSelectedRow() );
 		}

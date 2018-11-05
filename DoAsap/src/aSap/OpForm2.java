@@ -9,10 +9,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -36,22 +38,27 @@ public class OpForm2 implements ActionListener, FocusListener {
 	private int rowNr;
 	
 	private String[] validateArr;
-	private Object[] tfAll;
+	private Component[] tfAll;
 	
 	private ErrMessage errMessage;
 	
-	JFrame opForm;
+	private JFrame opForm;
+	private ArrayList<Component> listaComp = new ArrayList<Component>();		//out - jednak nie potrzeba, stara konstrukcja działa ok
+	
+	///
+	JComboBox<String> statusPole;
+	JComboBox<String> trybPole;
 
 	public OpForm2(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
 		
-		errMessage = new ErrMessage(mod);
-		String[] errMessageStr = errMessage.getErrMessage();
-		errMessage.addPropertyChangeListener(errMS); //potrzebne?
+		errMessage = new ErrMessage(mod); //out
+		String[] errMessageStr = errMessage.getErrMessage();	//out
+		errMessage.addPropertyChangeListener(errMS); //potrzebne?//out
 				
 		this.model = mod;
 		this.rowNr = rowNr;
 		this.colCount=model.getColumnCount();
-		this.validateArr = new String[model.getColumnCount()-model.getNumberDs()];
+		this.validateArr = new String[model.getColumnCount()-model.getNumberDs()]; //out
 		
 		//ramka
 		opForm = new JFrame();
@@ -73,23 +80,24 @@ public class OpForm2 implements ActionListener, FocusListener {
 		//definicje od rysunku-----------------------
 		JLabel[] nazwaPola = new JLabel[colCount];
 		
-		Object[] a = new Object[colCount];
-		Object[] b = new Object[colCount];
+		Component[] a = new Component[colCount];
+		Component[] b = new Component[colCount];
 		String migLayRowNo = "";
 		String[] targetNazwaPola = new String[colCount];
 		String[] targetField = new String[colCount];
-		String[] targetErrMessage = new String[colCount];	
+		String[] targetErrMessage = new String[colCount];	//out
 		for (int i = 0; i<=colCount-1; i++)	{
 			migLayRowNo = migLayRowNo+"[]";
 			targetNazwaPola[i] = "cell 0 "+ i;
 			targetField[i] = "cell 1 "+ i;
-			targetErrMessage[i] = "cell 2 "+ i;
+			targetErrMessage[i] = "cell 2 "+ i; //out
 		}
 		JLabel[] errMessage = errMS.getErrMessageLab();
 		
 		
 		//rysujemy-----------------------------------
-		panel.setLayout(new MigLayout("", "[][][]", migLayRowNo));
+		panel.setLayout(new MigLayout("", "[][][]", "[][][]"));
+		panel.add(new JLabel("Edycja danych postępowania"), "dock north");
 		for (int i = 0; i<=colCount-1-model.getNumberDs(); i++) {
 			nazwaPola[i] = new JLabel(model.getColumnName(i));
 			panel.add(nazwaPola[i], targetNazwaPola[i]);
@@ -97,19 +105,21 @@ public class OpForm2 implements ActionListener, FocusListener {
 				String[] strA5 = {"open","done","on hold"}; //do modelu
 				System.out.println(i+" - "+rowNr);
 				String defaultStatus = (String) model.getValueAt(rowNr, i);
-				JComboBox<String> a5 = (JComboBox<String>) new JComboBox<String>(strA5);
-				a5.setSelectedItem(defaultStatus);
-				a[i]=a5;
-				b[i]=a5;
+				statusPole = (JComboBox<String>) new JComboBox<String>(strA5);
+				statusPole.setSelectedItem(defaultStatus);
+				a[i]=statusPole;
+				b[i]=statusPole;
+				listaComp.add(statusPole);
 			}
 			else if (i==8)	{
 				String[] strA5 = {"przetarg","z wolnej ręki","inne"};//ściągać z modelu
 				String defaultTryb = (String) model.getValueAt(rowNr, i);
-				JComboBox<String> a5 = new JComboBox<String>(strA5);
-				a5.setSelectedItem(defaultTryb);
-				a5.setName(model.getColumnName(i));
-				a[i]=a5;
-				b[i]=a5;
+				trybPole = new JComboBox<String>(strA5);
+				trybPole.setSelectedItem(defaultTryb);
+				trybPole.setName(model.getColumnName(i));
+				a[i]=trybPole;
+				b[i]=trybPole;
+				listaComp.add(trybPole);
 			}
 			else if (i==9)	{
 				//String[] strA5 = {"PLK","PLI","CPO"};
@@ -120,12 +130,14 @@ public class OpForm2 implements ActionListener, FocusListener {
 				a5.setName(model.getColumnName(i));
 				a[i]=a5;
 				b[i]=a5;
+				listaComp.add(a5);
 			}
 			else if (i==5)	{
 				JTextArea a5 = new JTextArea(5, 15);
 				JScrollPane scrl = new JScrollPane(a5);
 				a[i]=a5;
 				b[i]=scrl;
+				listaComp.add(a5);
 				((Component) a[i]).setName(model.getColumnName(i));
 
 				if (rowNr<model.getRowCount())	{
@@ -137,10 +149,10 @@ public class OpForm2 implements ActionListener, FocusListener {
 
 			
 			else	{
-				JTextField a5 = new JTextField(8);
+				JTextField a5 = new JTextField(15);
 
 				a[i]=a5;
-				
+				listaComp.add(a5);
 
 				b[i]=a5;
 				if (rowNr<model.getRowCount())	{
@@ -207,10 +219,15 @@ public class OpForm2 implements ActionListener, FocusListener {
 		String[] rowAll = new String[tfAll.length];
 		for (int i = 0; i <= colCount-1; i++)	{
 			if (i<=colCount-1-liczbaDs)	{
-				if (i==4 || i==8 || i==9) {
+				if (i==4 || i==8) {
+					//rowAll[i] = 
 		    		rowAll[i]=(String) ( (JComboBox<String>) tfAll[i]).getSelectedItem();
+					//System.out.println("$$$ "+((JComboBox<String>) tfAll[i]).getSelectedItem().toString());
 		    	}
-		    	else	{
+				else if (i==9)	{
+					rowAll[i] = ((JLabel) tfAll[i]).getText();
+				}
+				else	{
 		    		if (tfAll[i]==null)	{
 		    			rowAll[i]=" ";
 		    		}
@@ -218,13 +235,14 @@ public class OpForm2 implements ActionListener, FocusListener {
 		    			rowAll[i]= ((JTextComponent) tfAll[i]).getText();
 		    		}
 		    	}
+
 				
 				savedRow[i]=rowAll[i];
 			}
 			else	{
 				savedRow[i]=model.getValueAt(rowNr, i);
 			}
-			System.out.println(savedRow[i]+" ** "+i);
+			//System.out.println(savedRow[i]+" ** "+i);
 		}
 
 		//--odczyt z okienek
@@ -233,6 +251,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 		
 		savedRow = DsIterator(dateString, savedRow, liczbaWierszy, liczbaDs, rowNr);
 		//EoDS
+		
 		//walidacja
 		
 		Validator vali = new Validator(savedRow, model);
