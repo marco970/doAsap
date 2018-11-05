@@ -41,6 +41,7 @@ public class NewForm implements  ActionListener, FocusListener {
 	private JComboBox trybPole;
 
 	private ArrayList<Component> listaComp = new ArrayList<Component>(); //lista komponentów do visible
+	private int rowNr;
 	
 	//przyciski
 	private JButton btnSave = new JButton("Zapisz");
@@ -51,6 +52,7 @@ public class NewForm implements  ActionListener, FocusListener {
 	public NewForm(int rowNr, MainTableModel mod)	{
 		
 		this.model = mod;
+		this.rowNr = rowNr;
 		//ramka
 		newFrame = new JFrame("Nowy ZZ");
 		newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -171,7 +173,7 @@ public class NewForm implements  ActionListener, FocusListener {
 	public void focusLost(FocusEvent eFg) {
 		String gotZZ = poleZZ.getText();
 		int lengthZZ = gotZZ.length();
-		SingleFieldValidator zzVal = new SingleFieldValidator("ZZ", gotZZ, model);
+		SingleFieldValidator zzVal = new SingleFieldValidator("ZZ", gotZZ, model, rowNr);
 		errZZLab.setText(zzVal.getErrMessage());
 		if (!zzVal.getValidationResult())	{//jeśli walidacja negatywna
 			btnNext.setEnabled(false);
@@ -205,7 +207,7 @@ public class NewForm implements  ActionListener, FocusListener {
 		    Date currentDate = new Date();
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss");
 		    String dateString = dateFormat.format(currentDate);
-		    System.out.println(model.getColumnCount());
+		    //System.out.println(model.getColumnCount());
 			for (int i=0; i<=model.getColumnCount()-1; i++)	{
 				if (i == 0)	savedRow[i] = poleZZ.getText();
 				else if(i==4) savedRow[i] = statusPole.getText();

@@ -103,7 +103,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 			panel.add(nazwaPola[i], targetNazwaPola[i]);
 			if (i==4)	{
 				String[] strA5 = {"open","done","on hold"}; //do modelu
-				System.out.println(i+" - "+rowNr);
+				//System.out.println(i+" - "+rowNr);
 				String defaultStatus = (String) model.getValueAt(rowNr, i);
 				statusPole = (JComboBox<String>) new JComboBox<String>(strA5);
 				statusPole.setSelectedItem(defaultStatus);
@@ -286,10 +286,11 @@ public class OpForm2 implements ActionListener, FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		System.out.println(((JTextComponent) e.getSource()).getText());
+		System.out.println("toooo- "+((JTextComponent) e.getSource()).getName());
 		
 		String odFocus = ((JTextComponent) e.getSource()).getText();
 		String odFocusName = e.getComponent().getName();
+		
 		
 
 		

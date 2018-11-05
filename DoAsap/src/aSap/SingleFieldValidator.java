@@ -15,10 +15,12 @@ public class SingleFieldValidator {
 	private int colPosition;
 	private Object[][] o;
 	private String spolka;
+	private int rowNr;
 	
-	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model)	{
+	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNr)	{
 		this.fieldName = fieldName;
 		this.model = model;
+		this.rowNr = rowNr;
 		
 		int i = model.getColumnPosition(fieldName);
 		this.colPosition=i;
@@ -66,7 +68,20 @@ public class SingleFieldValidator {
 		}		
 	}
 	//metody walidacyjne
-		public void notNull(String field)	{	
+	public void isPredecessor(String field)	{
+		String[] errMessage = {
+				"uzupełnij najpierw numer PZ",
+				"uzupełnij najpierw numer WP"
+		};
+		for (int i=2; i<=4; i++)	{
+			if(model.getColumnName(i).equals(field))	{
+				if(model.doesElExists(i-1, rowNr))	valOrg(true,"");
+				else valOrg(false,errMessage[i-1]);
+			}
+		}
+	}
+	
+	public void notNull(String field)	{	
 			if("".equals(field)||field==null) {
 				valOrg(false,"pole nie może być puste");
 			}
