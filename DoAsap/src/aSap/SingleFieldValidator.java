@@ -107,21 +107,22 @@ public class SingleFieldValidator {
 				else valOrg(false,"postępowanie o tym numerze już istnieje");
 			}
 		}
-		public void checkFormat(String field)	{
+		public void checkFormat(String field)	{	//dorobić dla PZ
 			if (field.length()>=13)	{
-			String fstPart = field.substring(0, 3);
-			String sndPart = field.substring(3, 6);
-			String trdPart = field.substring(6,13);
-			if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
-			else valOrg(false,"nieprawidłowy format numeru_1");
-			if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
-				valOrg(true,"");
-				spolka=sndPart;
-			}
-			else valOrg(false,"nieprawidłowy format numeru_2");
-			
-			if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
-			else valOrg(false,"nieprawidłowy format numeru_3");
+				String fstPart = field.substring(0, 3);
+				String sndPart = field.substring(3, 6);
+				String trdPart = field.substring(6,13);
+				//tu dorobić dla PZ
+				if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
+					else valOrg(false,"nieprawidłowy format numeru_1");
+				if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
+					valOrg(true,"");
+					spolka=sndPart;
+				}
+				else valOrg(false,"nieprawidłowy format numeru_2");
+				
+				if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
+				else valOrg(false,"nieprawidłowy format numeru_3");
 			}
 			
 		}

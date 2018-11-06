@@ -48,6 +48,16 @@ public class OpForm2 implements ActionListener, FocusListener {
 	///
 	JComboBox<String> statusPole;
 	JComboBox<String> trybPole;
+	
+	JLabel errPZLab; 
+	JLabel errWPLab; 
+	JLabel errDKLab; 
+	
+	
+	JPanel panel;
+	
+	
+	JButton btnSave;
 
 	public OpForm2(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
 		
@@ -72,7 +82,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 		opForm.setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow]", "[grow][][]"));//różnica
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		contentPane.add(panel, "cell 0 0,grow");
 		
 		//int colCount = model.getColumnCount();
@@ -90,20 +100,39 @@ public class OpForm2 implements ActionListener, FocusListener {
 			migLayRowNo = migLayRowNo+"[]";
 			targetNazwaPola[i] = "cell 0 "+ i;
 			targetField[i] = "cell 1 "+ i;
-			targetErrMessage[i] = "cell 2 "+ i; //out
+			//targetErrMessage[i] = "cell 2 "+ i; //out
 		}
-		JLabel[] errMessage = errMS.getErrMessageLab();	//out
+		//JLabel[] errMessage = errMS.getErrMessageLab();	//out
 		
 		
 		//rysujemy-----------------------------------
 		panel.setLayout(new MigLayout("", "[][][]", "[][][]"));
 		panel.add(new JLabel("Edycja danych postępowania"), "dock north");
+		
+		errPZLab = new JLabel();
+		errPZLab.setHorizontalAlignment(SwingConstants.LEFT);
+		errPZLab.setForeground(Color.RED);
+		errPZLab.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(errPZLab, "cell 2 1");
+		
+		errWPLab = new JLabel();
+		errWPLab.setHorizontalAlignment(SwingConstants.LEFT);
+		errWPLab.setForeground(Color.RED);
+		errWPLab.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(errWPLab, "cell 2 2");
+		
+		errDKLab = new JLabel();
+		errDKLab.setHorizontalAlignment(SwingConstants.LEFT);
+		errDKLab.setForeground(Color.RED);
+		errDKLab.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(errPZLab, "cell 2 3");
+		
+		
 		for (int i = 0; i<=colCount-1-model.getNumberDs(); i++) {
 			nazwaPola[i] = new JLabel(model.getColumnName(i));
 			panel.add(nazwaPola[i], targetNazwaPola[i]);
 			if (i==4)	{
 				String[] strA5 = {"open","done","on hold"}; //do modelu
-				//System.out.println(i+" - "+rowNr);
 				String defaultStatus = (String) model.getValueAt(rowNr, i);
 				statusPole = (JComboBox<String>) new JComboBox<String>(strA5);
 				statusPole.setSelectedItem(defaultStatus);
@@ -122,11 +151,16 @@ public class OpForm2 implements ActionListener, FocusListener {
 				listaComp.add(trybPole);
 			}
 			else if (i==9)	{
-				//String[] strA5 = {"PLK","PLI","CPO"};
 				String defaultSpolka = (String) model.getValueAt(rowNr, i);
-				//JComboBox<String> a5 = new JComboBox<String>(strA5);
 				JLabel a5 = new JLabel(defaultSpolka);
-				//a5.setSelectedItem(defaultSpolka);
+				a5.setName(model.getColumnName(i));
+				a[i]=a5;
+				b[i]=a5;
+				listaComp.add(a5);
+			}
+			else if (i==0)	{
+				String defaultZZ = (String) model.getValueAt(rowNr, i);
+				JLabel a5 = new JLabel(defaultZZ);
 				a5.setName(model.getColumnName(i));
 				a[i]=a5;
 				b[i]=a5;
@@ -146,8 +180,6 @@ public class OpForm2 implements ActionListener, FocusListener {
 				}
 
 			}
-
-			
 			else	{
 				JTextField a5 = new JTextField(15);
 
@@ -167,17 +199,26 @@ public class OpForm2 implements ActionListener, FocusListener {
 			}
 				
 			panel.add((Component) b[i], targetField[i]);
-			errMessage[i] = new JLabel(errMessageStr[i]);//--------!//out
-			panel.add(errMessage[i], targetErrMessage[i]); //out
+			if (i==1)	{
+				panel.add(errPZLab, "cell 2 1");
+			}
+			else if (i==2)	{
+				panel.add(errWPLab, "cell 2 2");
+			}
+			else if (i==3)	{
+				panel.add(errDKLab, "cell 2 3");
+			}
+			//errMessage[i] = new JLabel(errMessageStr[i]);//--------!//out
+			//panel.add(errMessage[i], targetErrMessage[i]); //out
 			
-			errMessage[i].setHorizontalAlignment(SwingConstants.LEFT);
-			errMessage[i].setForeground(Color.RED);
-			errMessage[i].setFont(new Font("Tahoma", Font.PLAIN, 9));	
+			//errMessage[i].setHorizontalAlignment(SwingConstants.LEFT);
+			//errMessage[i].setForeground(Color.RED);
+			//errMessage[i].setFont(new Font("Tahoma", Font.PLAIN, 9));	
 						
 		}//koniec dużego for-----------------------
 		tfAll = a;
 		//przycisk---------------------------------------
-		JButton btnSave = new JButton("save");
+		btnSave = new JButton("save");
 		btnSave.addActionListener(this);
 		
 		JSeparator separator = new JSeparator();
@@ -188,6 +229,9 @@ public class OpForm2 implements ActionListener, FocusListener {
 		contentPane.add(btnSave, "cell 0 2");
 	
 		//dalej
+		//nowe etykiety błędów-----------
+
+		
 		
 	}//koniec konstruktora
 
@@ -214,17 +258,14 @@ public class OpForm2 implements ActionListener, FocusListener {
 	    Date currentDate = new Date();
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss");
 	    String dateString = dateFormat.format(currentDate);
-	    //System.out.println(colCount);
 		Object[] savedRow = new Object[colCount];
 		String[] rowAll = new String[tfAll.length];
 		for (int i = 0; i <= colCount-1; i++)	{
 			if (i<=colCount-1-liczbaDs)	{
 				if (i==4 || i==8) {
-					//rowAll[i] = 
 		    		rowAll[i]=(String) ( (JComboBox<String>) tfAll[i]).getSelectedItem();
-					//System.out.println("$$$ "+((JComboBox<String>) tfAll[i]).getSelectedItem().toString());
 		    	}
-				else if (i==9)	{
+				else if (i==0 || i==9)	{
 					rowAll[i] = ((JLabel) tfAll[i]).getText();
 				}
 				else	{
@@ -235,14 +276,11 @@ public class OpForm2 implements ActionListener, FocusListener {
 		    			rowAll[i]= ((JTextComponent) tfAll[i]).getText();
 		    		}
 		    	}
-
-				
 				savedRow[i]=rowAll[i];
 			}
 			else	{
 				savedRow[i]=model.getValueAt(rowNr, i);
 			}
-			//System.out.println(savedRow[i]+" ** "+i);
 		}
 
 		//--odczyt z okienek
@@ -252,22 +290,18 @@ public class OpForm2 implements ActionListener, FocusListener {
 		savedRow = DsIterator(dateString, savedRow, liczbaWierszy, liczbaDs, rowNr);
 		//EoDS
 		
-		//walidacja
+		//walidacja  //out wszystko poniżej
 		
 		Validator vali = new Validator(savedRow, model);
 		validateArr = (String[]) vali.getMessageArray();
 		for (String el: validateArr)	{
-			//System.out.println("OknoF: "+el);
 		}
 		errMessage.setErrMessage(validateArr);		//to poprawić, 
 													//powinno być chyba w rozsądniejszym miejscu
 		test = vali.getValDone();
-		//System.out.println("test: "+test+" rowNr: "+rowNr+" liczba wierszy: "+ liczbaWierszy);
 
-		
 		//EoWalidacja
 		if(test==true)	{
-			//if(rowNr>liczbaWierszy) model.recordAdd(emtyRow());
 			if(rowNr>liczbaWierszy) model.recordAdd(savedRow);
 			else model.recordUpdate(savedRow, rowNr);
 			try {new Zapis(model);} catch (IOException e1) {e1.printStackTrace();}
@@ -287,10 +321,21 @@ public class OpForm2 implements ActionListener, FocusListener {
 	@Override
 	public void focusLost(FocusEvent e) {
 		System.out.println("toooo- "+((JTextComponent) e.getSource()).getName());
-		
-		String odFocus = ((JTextComponent) e.getSource()).getText();
-		String odFocusName = e.getComponent().getName();
-		
+		System.out.println("ta1- "+((JTextComponent) e.getSource()).getText());
+		//String odFocus = ((JTextComponent) e.getSource()).getText();
+		//String odFocusName = e.getComponent().getName();
+		if (((JTextComponent) e.getSource()).getName().equals("PZ")) {
+			SingleFieldValidator zzVal = new SingleFieldValidator("PZ", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			errPZLab.setText(zzVal.getErrMessage());
+		}
+		else if (((JTextComponent) e.getSource()).getName().equals("WP")) {
+			SingleFieldValidator zzVal = new SingleFieldValidator("WP", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			errWPLab.setText(zzVal.getErrMessage());
+		}
+		if (((JTextComponent) e.getSource()).getName().equals("DK")) {
+			SingleFieldValidator zzVal = new SingleFieldValidator("DK", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			errDKLab.setText(zzVal.getErrMessage());
+		}
 		
 
 		
