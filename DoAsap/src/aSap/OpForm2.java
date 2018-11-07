@@ -59,14 +59,14 @@ public class OpForm2 implements ActionListener, FocusListener {
 	
 	JButton btnSave;
 
-	public OpForm2(String nazwa, int rowNr, MainTableModel mod, ErrMessageShow errMS)  {
+	public OpForm2(String nazwa, int rowNo, MainTableModel mod, ErrMessageShow errMS)  {
 		
 		errMessage = new ErrMessage(mod); //out
 		String[] errMessageStr = errMessage.getErrMessage();	//out
 		errMessage.addPropertyChangeListener(errMS); //potrzebne?//out
 				
 		this.model = mod;
-		this.rowNr = rowNr;
+		this.rowNr = rowNo;
 		this.colCount=model.getColumnCount();
 		this.validateArr = new String[model.getColumnCount()-model.getNumberDs()]; //out
 		
@@ -166,6 +166,32 @@ public class OpForm2 implements ActionListener, FocusListener {
 				b[i]=a5;
 				listaComp.add(a5);
 			}
+			else if (i>0 && i<=3)	{
+				//System.out.println("asd "+i+model.doesElExists(rowNr, i)+rowNr+model.getValueAt(rowNr, i));
+				if (model.doesElExists(rowNr, i))	{
+					JLabel a5 = new JLabel((String) model.getValueAt(rowNr, i));
+					a5.setName(model.getColumnName(i));
+					a[i]=a5;
+					listaComp.add(a5);
+					b[i]=a5;
+				}
+				else	{
+					JTextField a5 = new JTextField(13);
+					a[i]=a5;
+					listaComp.add(a5);
+					b[i]=a5;
+					if (rowNr<model.getRowCount())	{
+						if (model.getValueAt(rowNr, i)!=null) 	((JTextComponent) a[i]).setText(model.getValueAt(rowNr, i).toString());
+						else										((JTextComponent) a[i]).setText("");
+					}
+					
+					((Component) a[i]).setName(model.getColumnName(i));
+					if (i<=3)	{
+						( (Component) a[i]).addFocusListener(this);
+					}
+				}
+				//System.out.println("asd "+i +"  -> "+b[i].toString());
+			}
 			else if (i==5)	{
 				JTextArea a5 = new JTextArea(5, 15);
 				JScrollPane scrl = new JScrollPane(a5);
@@ -181,7 +207,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 
 			}
 			else	{
-				JTextField a5 = new JTextField(15);
+				JTextField a5 = new JTextField(13);
 
 				a[i]=a5;
 				listaComp.add(a5);
@@ -221,10 +247,12 @@ public class OpForm2 implements ActionListener, FocusListener {
 		btnSave = new JButton("save");
 		btnSave.addActionListener(this);
 		
-		JSeparator separator = new JSeparator();
+		/*
+		
 		separator.setForeground(Color.GRAY);
 		separator.setVisible(true);
 		contentPane.add(separator, "cell 0 1");
+		*/
 		btnSave.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(btnSave, "cell 0 2");
 	
@@ -267,6 +295,10 @@ public class OpForm2 implements ActionListener, FocusListener {
 		    	}
 				else if (i==0 || i==9)	{
 					rowAll[i] = ((JLabel) tfAll[i]).getText();
+				}
+				else if (i>0 || i<=3)	{
+					if(model.doesElExists(rowNr, i)) rowAll[i] = ((JLabel) tfAll[i]).getText();					
+					else rowAll[i]= ((JTextComponent) tfAll[i]).getText();						
 				}
 				else	{
 		    		if (tfAll[i]==null)	{
@@ -311,6 +343,10 @@ public class OpForm2 implements ActionListener, FocusListener {
 
 	public void addChangeListener(EkranGlowny ekranGlowny) { 
 		//nie używana ale musi zostać
+	}
+	public void elReplace(Component added, Component removed, JPanel p, String migTarget)	{	//czy aby na pewno potrzebujemy tej metody?
+		p.remove(removed);
+		p.add(added,migTarget);
 	}
 
 	@Override

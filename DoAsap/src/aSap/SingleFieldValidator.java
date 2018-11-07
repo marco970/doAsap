@@ -17,32 +17,35 @@ public class SingleFieldValidator {
 	private String spolka;
 	private int rowNr;
 	
-	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNr)	{
+	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNo)	{
 		this.fieldName = fieldName;
 		this.model = model;
-		this.rowNr = rowNr;
+		this.rowNr = rowNo;
 		
 		int i = model.getColumnPosition(fieldName);
 		this.colPosition=i;
 		this.o = model.getMatrix();
 		
-		for (Object[] el: o)	{//do czego to służy?	
+		for (Object[] el: o)	{
 			if (el[i]==null) el[i] = "";//tu na pewno zastępuje nula pustym stringiem, co jest potrzebne
 			//colData[i]=(String) el[i];
 			//System.out.println(el[i]);
 		}
-		
-		
 		ValidatioModel valModel = new ValidatioModel();
-		
-
 		String[] b = valModel.getValArray(fieldName);
 		for(String el: b)	{
 			//System.out.println(el+" - "+fieldValue);
 			runMethod(el, fieldValue);
 		}
 		///System.out.println(valDone+ " *** "+errMessage);
-		doesExist(fieldValue);
+		//doesExist(fieldValue);  //-----------UWAGA, nie wiem, do czego to było...
+		spolka="";
+		if (model.doesElExists(rowNr, 0))	{
+			spolka = ((String) model.getValueAt(rowNr, 0)).substring(4,6);
+		}
+		System.out.println(spolka);
+	
+		
 	}//koniec konstruktora
 	
 	
@@ -78,9 +81,9 @@ public class SingleFieldValidator {
 			for (int i=2; i<=3; i++)	{
 				
 				if(model.getColumnName(i).equals(fieldName))	{
-					System.out.println("spr el i-1: "+model.getValueAt(i-1, rowNr));
-					System.out.println("spr el i-1: "+model.doesElExists(i-1, rowNr));
-					if(model.doesElExists(i-1, rowNr))	valOrg(true,"");
+					System.out.println("spr el i-1: "+model.getValueAt(rowNr, i-1));
+					System.out.println("spr el i-1: "+model.doesElExists(rowNr, i-1));
+					if(model.doesElExists(rowNr, i-1))	valOrg(true,"");
 					else valOrg(false,errMessage[i-2]);
 				}
 			}
@@ -118,6 +121,8 @@ public class SingleFieldValidator {
 				String fstPart = field.substring(0, 3);
 				String sndPart = field.substring(3, 6);
 				String trdPart = field.substring(6,13);
+				
+
 				//tu dorobić dla PZ
 				if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_1");
@@ -151,6 +156,7 @@ public class SingleFieldValidator {
 	public String getSpolka()	{
 		return spolka;
 	}
+	
 	
 
 }//koniec klasy
