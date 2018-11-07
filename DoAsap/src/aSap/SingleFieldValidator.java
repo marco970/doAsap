@@ -41,7 +41,7 @@ public class SingleFieldValidator {
 			//System.out.println(el+" - "+fieldValue);
 			runMethod(el, fieldValue);
 		}
-		System.out.println(valDone+ " *** "+errMessage);
+		///System.out.println(valDone+ " *** "+errMessage);
 		doesExist(fieldValue);
 	}//koniec konstruktora
 	
@@ -69,14 +69,20 @@ public class SingleFieldValidator {
 	}
 	//metody walidacyjne
 	public void isPredecessor(String field)	{
+		System.out.println("poprzedniki"+model.getColumnName(2)+" - "+model.getColumnName(3)+" - "+ field +" -- " +fieldName);
 		String[] errMessage = {
 				"uzupełnij najpierw numer PZ",
 				"uzupełnij najpierw numer WP"
 		};
-		for (int i=2; i<=4; i++)	{
-			if(model.getColumnName(i).equals(field))	{
-				if(model.doesElExists(i-1, rowNr))	valOrg(true,"");
-				else valOrg(false,errMessage[i-1]);
+		if(!("".equals(field)||field==null))	{
+			for (int i=2; i<=3; i++)	{
+				
+				if(model.getColumnName(i).equals(fieldName))	{
+					System.out.println("spr el i-1: "+model.getValueAt(i-1, rowNr));
+					System.out.println("spr el i-1: "+model.doesElExists(i-1, rowNr));
+					if(model.doesElExists(i-1, rowNr))	valOrg(true,"");
+					else valOrg(false,errMessage[i-2]);
+				}
 			}
 		}
 	}
@@ -115,14 +121,23 @@ public class SingleFieldValidator {
 				//tu dorobić dla PZ
 				if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_1");
-				if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
-					valOrg(true,"");
-					spolka=sndPart;
+				//if PZ
+				if (fstPart.equals("PZ/"))	{
+					String pzPart = field.substring(3, 13);
+					if(pzPart.matches("[0-9]{10}")) valOrg(true,"");
+					else valOrg(false,"nieprawidłowy format numeru_2,5");
 				}
-				else valOrg(false,"nieprawidłowy format numeru_2");
-				
-				if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
-				else valOrg(false,"nieprawidłowy format numeru_3");
+				// else to ->
+				else	{
+					if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
+						valOrg(true,"");
+						spolka=sndPart;
+					}
+					else valOrg(false,"nieprawidłowy format numeru_2");
+					
+					if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
+					else valOrg(false,"nieprawidłowy format numeru_3");
+				}
 			}
 			
 		}
