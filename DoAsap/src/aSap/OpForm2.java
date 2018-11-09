@@ -296,7 +296,8 @@ public class OpForm2 implements ActionListener, FocusListener {
 				else if (i==0 || i==9)	{
 					rowAll[i] = ((JLabel) tfAll[i]).getText();
 				}
-				else if (i>0 || i<=3)	{
+				else if (i>0 && i<=3)	{
+					//System.out.println("nr: "+i+"; "+ model.doesElExists(rowNr, i)+" -- "+ model.getValueAt(rowNr, i));
 					if(model.doesElExists(rowNr, i)) rowAll[i] = ((JLabel) tfAll[i]).getText();					
 					else rowAll[i]= ((JTextComponent) tfAll[i]).getText();						
 				}
@@ -348,6 +349,11 @@ public class OpForm2 implements ActionListener, FocusListener {
 		p.remove(removed);
 		p.add(added,migTarget);
 	}
+	public String getPrecedValue(int i)	{
+		String a = "";
+		if (i==1 || i==2 || i==3) a=((JTextComponent) tfAll[i]).getText();	
+		return a;
+	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
@@ -356,23 +362,28 @@ public class OpForm2 implements ActionListener, FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		System.out.println("toooo- "+((JTextComponent) e.getSource()).getName());
-		System.out.println("ta1- "+((JTextComponent) e.getSource()).getText());
+		//System.out.println("toooo- "+((JTextComponent) e.getSource()).getName());
+		//System.out.println("ta1- "+((JTextComponent) e.getSource()).getText());
 		//String odFocus = ((JTextComponent) e.getSource()).getText();
 		//String odFocusName = e.getComponent().getName();
+		SingleFieldValidator valCheck = new SingleFieldValidator();
 		if (((JTextComponent) e.getSource()).getName().equals("PZ")) {
-			SingleFieldValidator zzVal = new SingleFieldValidator("PZ", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			SingleFieldValidator zzVal = new SingleFieldValidator("PZ", ((JTextComponent) e.getSource()).getText(), model, rowNr, this);
 			errPZLab.setText(zzVal.getErrMessage());
+			valCheck = zzVal;
 		}
 		else if (((JTextComponent) e.getSource()).getName().equals("WP")) {
-			SingleFieldValidator zzVal = new SingleFieldValidator("WP", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			SingleFieldValidator zzVal = new SingleFieldValidator("WP", ((JTextComponent) e.getSource()).getText(), model, rowNr, this);
 			errWPLab.setText(zzVal.getErrMessage());
+			valCheck = zzVal;
 		}
 		if (((JTextComponent) e.getSource()).getName().equals("DK")) {
-			SingleFieldValidator zzVal = new SingleFieldValidator("DK", ((JTextComponent) e.getSource()).getText(), model, rowNr);
+			SingleFieldValidator zzVal = new SingleFieldValidator("DK", ((JTextComponent) e.getSource()).getText(), model, rowNr, this);
 			errDKLab.setText(zzVal.getErrMessage());
+			valCheck = zzVal;
 		}
-		
+		if(!valCheck.getValidationResult())	btnSave.setEnabled(false);
+		else btnSave.setEnabled(true);
 
 		
 	}

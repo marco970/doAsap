@@ -16,6 +16,9 @@ public class SingleFieldValidator {
 	private Object[][] o;
 	private String spolka="";
 	private int rowNr;
+	private OpForm2 opF;
+	
+	public SingleFieldValidator(){}
 	
 	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNo)	{
 		this.fieldName = fieldName;
@@ -40,13 +43,41 @@ public class SingleFieldValidator {
 		///System.out.println(valDone+ " *** "+errMessage);
 		//doesExist(fieldValue);  //-----------UWAGA, nie wiem, do czego to było...
 		spolka="";
-		if (model.doesElExists(rowNr, 0))	{
-			spolka = ((String) model.getValueAt(rowNr, 0)).substring(4,6);
+		if (fieldName.equals("ZZ"))	{
+			if (fieldValue.length()>6)	spolka=fieldValue.substring(3, 6);
 		}
-		System.out.println("**_ "+spolka+"row "+ rowNr+ "aaa "+model.getValueAt(rowNr, 0).toString());
-	
+		else spolka=model.getValueAt(rowNr,  9).toString();
+		//System.out.println("**_ "+spolka+"row "+ rowNr+ "aaa "+model.getValueAt(rowNr, 0).toString());
 		
-	}//koniec konstruktora
+		
+	}//koniec konstruktora 1
+	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNo, OpForm2 opF) {
+		this.fieldName = fieldName;
+		this.model = model;
+		this.rowNr = rowNo;
+		
+		int i = model.getColumnPosition(fieldName);
+		this.colPosition=i;
+		this.o = model.getMatrix();
+		
+		for (Object[] el: o)	{
+			if (el[i]==null) el[i] = "";//tu na pewno zastępuje nula pustym stringiem, co jest potrzebne
+		}
+		ValidatioModel valModel = new ValidatioModel();
+		String[] b = valModel.getValArray(fieldName);
+		for(String el: b)	{
+			runMethod(el, fieldValue);
+		}
+		spolka="";
+		if (fieldName.equals("ZZ"))	{
+			if (fieldValue.length()>6)	spolka=fieldValue.substring(3, 6);
+		}
+		else spolka=model.getValueAt(rowNr,  9).toString();
+		this.opF = opF;
+		//System.out.println("hej: "+opF.getPrecedValue(1));
+		//System.out.println("hej: "+opF.getPrecedValue(2));
+		//System.out.println("hej: "+opF.getPrecedValue(3));
+	}
 	
 	
 	public boolean getValidationResult()	{
@@ -72,18 +103,19 @@ public class SingleFieldValidator {
 	}
 	//metody walidacyjne
 	public void isPredecessor(String field)	{
-		System.out.println("poprzedniki"+model.getColumnName(2)+" - "+model.getColumnName(3)+" - "+ field +" -- " +fieldName);
+		//System.out.println("poprzedniki"+model.getColumnName(2)+" - "+model.getColumnName(3)+" - "+ field +" -- " +fieldName);
 		String[] errMessage = {
-				"uzupełnij najpierw numer PZ",
-				"uzupełnij najpierw numer WP"
+				"najpierw uzupełnij lub zapisz numer PZ",
+				"najpierw uzupełnij lub zapisz numer WP"
 		};
 		if(!("".equals(field)||field==null))	{
 			for (int i=2; i<=3; i++)	{
 				
 				if(model.getColumnName(i).equals(fieldName))	{
-					System.out.println("spr el i-1: "+model.getValueAt(rowNr, i-1));
-					System.out.println("spr el i-1: "+model.doesElExists(rowNr, i-1));
+					//System.out.println("spr el i-1: "+model.getValueAt(rowNr, i-1));
+					//System.out.println("spr el i-1: "+model.doesElExists(rowNr, i-1));
 					if(model.doesElExists(rowNr, i-1))	valOrg(true,"");
+					//else if (!opF.getPrecedValue(i-1).equals("")) valOrg(true,"");
 					else valOrg(false,errMessage[i-2]);
 				}
 			}
@@ -139,12 +171,10 @@ public class SingleFieldValidator {
 						spolka=sndPart;
 					}
 					else valOrg(false,"nieprawidłowy format numeru_2");
-					
 					if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_3");
 				}
 			}
-			
 		}
 		//EoMetodyWalidacyjne	
 		
