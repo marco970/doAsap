@@ -14,7 +14,7 @@ public class SingleFieldValidator {
 	private String[] colData;
 	private int colPosition;
 	private Object[][] o;
-	private String spolka;
+	private String spolka="";
 	private int rowNr;
 	
 	public SingleFieldValidator(String fieldName, String fieldValue, MainTableModel model, int rowNo)	{
@@ -43,7 +43,7 @@ public class SingleFieldValidator {
 		if (model.doesElExists(rowNr, 0))	{
 			spolka = ((String) model.getValueAt(rowNr, 0)).substring(4,6);
 		}
-		System.out.println(spolka);
+		System.out.println("**_ "+spolka+"row "+ rowNr+ "aaa "+model.getValueAt(rowNr, 0).toString());
 	
 		
 	}//koniec konstruktora

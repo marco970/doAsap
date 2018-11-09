@@ -175,6 +175,8 @@ public class NewForm implements  ActionListener, FocusListener {
 		int lengthZZ = gotZZ.length();
 		SingleFieldValidator zzVal = new SingleFieldValidator("ZZ", gotZZ, model, rowNr);
 		errZZLab.setText(zzVal.getErrMessage());
+		String spolka = zzVal.getSpolka();
+		System.out.println("*** "+spolka);
 		if (!zzVal.getValidationResult())	{//jeśli walidacja negatywna
 			btnNext.setEnabled(false);
 			poleZZ.requestFocus();
@@ -183,7 +185,7 @@ public class NewForm implements  ActionListener, FocusListener {
 			btnNext.setEnabled(false);
 			poleZZlab.setText(gotZZ);
 			elReplace(poleZZlab, poleZZ, panel, "cell 1 1");
-			spolkaPole.setText(zzVal.getSpolka());
+			spolkaPole.setText(spolka);
 			makeThemVisible(true);
 			btnSave.setEnabled(true);
 			btnBack.setVisible(true);
