@@ -291,6 +291,9 @@ public class OpForm2 implements ActionListener, FocusListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
+		if (e.getActionCommand().equals("close"))	{
+			opForm.setVisible(false); //to jakimś cudem działa dobrze
+		}
 		int liczbaDs = model.getNumberDs();
 		int liczbaWierszy = model.getRowCount();
 		
@@ -350,8 +353,10 @@ public class OpForm2 implements ActionListener, FocusListener {
 			if(rowNr>liczbaWierszy) model.recordAdd(savedRow);
 			else model.recordUpdate(savedRow, rowNr);
 			try {new Zapis(model);} catch (IOException e1) {e1.printStackTrace();}
-			opForm.setVisible(false); //to jakimś cudem działa dobrze
+			
 		}
+		opForm.setVisible(false); //to jakimś cudem działa dobrze
+		//jak zrobić, żeby kliknęcie Save przeładowało OpForm2
 	}//koniec metody actionPerformed
 	/*
 	public void addChangeListener(EkranGlowny ekranGlowny) { 
