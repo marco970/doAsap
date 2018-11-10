@@ -58,6 +58,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 	
 	
 	JButton btnSave;
+	JButton btnClose;
 
 	public OpForm2(String nazwa, int rowNo, MainTableModel mod, ErrMessageShow errMS)  {
 		
@@ -169,14 +170,22 @@ public class OpForm2 implements ActionListener, FocusListener {
 			else if (i>0 && i<=3)	{
 				//System.out.println("asd "+i+model.doesElExists(rowNr, i)+rowNr+model.getValueAt(rowNr, i));
 				if (model.doesElExists(rowNr, i))	{
+					
 					JLabel a5 = new JLabel((String) model.getValueAt(rowNr, i));
 					a5.setName(model.getColumnName(i));
+
+						
+					
 					a[i]=a5;
 					listaComp.add(a5);
 					b[i]=a5;
 				}
 				else	{
 					JTextField a5 = new JTextField(13);
+					if (i>1)	{
+						if (!model.doesElExists(rowNr, i-1))	a5.setEnabled(false);
+						
+					}
 					a[i]=a5;
 					listaComp.add(a5);
 					b[i]=a5;
@@ -245,7 +254,9 @@ public class OpForm2 implements ActionListener, FocusListener {
 		tfAll = a;
 		//przycisk---------------------------------------
 		btnSave = new JButton("save");
+		btnClose = new JButton("close");
 		btnSave.addActionListener(this);
+		btnClose.addActionListener(this);
 		
 		/*
 		
@@ -255,6 +266,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 		*/
 		btnSave.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(btnSave, "cell 0 2");
+		contentPane.add(btnClose, "cell 0 2");
 	
 		//dalej
 		//nowe etykiety błędów-----------
@@ -278,7 +290,7 @@ public class OpForm2 implements ActionListener, FocusListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		System.out.println(e.getActionCommand());
 		int liczbaDs = model.getNumberDs();
 		int liczbaWierszy = model.getRowCount();
 		
@@ -341,10 +353,11 @@ public class OpForm2 implements ActionListener, FocusListener {
 			opForm.setVisible(false); //to jakimś cudem działa dobrze
 		}
 	}//koniec metody actionPerformed
-
+	/*
 	public void addChangeListener(EkranGlowny ekranGlowny) { 
 		//nie używana ale musi zostać
 	}
+	*/
 	public void elReplace(Component added, Component removed, JPanel p, String migTarget)	{	//czy aby na pewno potrzebujemy tej metody?
 		p.remove(removed);
 		p.add(added,migTarget);

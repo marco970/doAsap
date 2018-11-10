@@ -42,11 +42,7 @@ public class SingleFieldValidator {
 		}
 		///System.out.println(valDone+ " *** "+errMessage);
 		//doesExist(fieldValue);  //-----------UWAGA, nie wiem, do czego to było...
-		spolka="";
-		if (fieldName.equals("ZZ"))	{
-			if (fieldValue.length()>6)	spolka=fieldValue.substring(3, 6);
-		}
-		else spolka=model.getValueAt(rowNr,  9).toString();
+		//spolka
 		//System.out.println("**_ "+spolka+"row "+ rowNr+ "aaa "+model.getValueAt(rowNr, 0).toString());
 		
 		
@@ -72,7 +68,7 @@ public class SingleFieldValidator {
 		if (fieldName.equals("ZZ"))	{
 			if (fieldValue.length()>6)	spolka=fieldValue.substring(3, 6);
 		}
-		else spolka=model.getValueAt(rowNr,  9).toString();
+		else spolka=model.getValueAt(rowNr,9).toString();
 		this.opF = opF;
 		//System.out.println("hej: "+opF.getPrecedValue(1));
 		//System.out.println("hej: "+opF.getPrecedValue(2));
@@ -153,13 +149,17 @@ public class SingleFieldValidator {
 				String fstPart = field.substring(0, 3);
 				String sndPart = field.substring(3, 6);
 				String trdPart = field.substring(6,13);
-				
+				spolka="";
+				if (fieldName.equals("ZZ"))	{
+					if (field.length()>6)	spolka=field.substring(3, 6);
+				}
+				else spolka=model.getValueAt(rowNr,9).toString();
 
 				//tu dorobić dla PZ
 				if (fstPart.equals(fieldName+"/"))	valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_1");
 				//if PZ
-				if (fstPart.equals("PZ/"))	{
+				if (fieldName.equals("PZ"))	{
 					String pzPart = field.substring(3, 13);
 					if(pzPart.matches("[0-9]{10}")) valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_2,5");
@@ -168,12 +168,23 @@ public class SingleFieldValidator {
 				else	{
 					if (sndPart.equals("PLK") || sndPart.equals("PLI") || sndPart.equals("CPO") ) {
 						valOrg(true,"");
-						spolka=sndPart;
+						//spolka=sndPart;
 					}
 					else valOrg(false,"nieprawidłowy format numeru_2");
 					if(trdPart.matches("[0-9]{7}")) valOrg(true,"");
 					else valOrg(false,"nieprawidłowy format numeru_3");
+					if (fieldName.equals("WP")||fstPart.equals("DK"))	{
+						if (sndPart.equals(spolka))	valOrg(true,"");
+						else valOrg(false,"nieprawidłowy format numeru_4");
+					}
 				}
+				//System.out.println(fieldName+" "+spolka+" "+sndPart);
+				/*
+				if (fieldName.equals("WP")||fstPart.equals("DK"))	{
+					if (sndPart.equals(spolka))	valOrg(true,"");
+					else valOrg(false,"nieprawidłowy format numeru_5");
+				}
+				*/
 			}
 		}
 		//EoMetodyWalidacyjne	

@@ -28,8 +28,8 @@ public class MainTableModel extends AbstractTableModel {
 	
 	
 	//private String current = "F:/aSapData/Current3.txt";
-	//private String current = "D:/Documents/00_projekty/doAsapVer2/aSapData/Current3.txt";
-	private String current = "C:/Users/marcin.kuciak/Documents/workIT_projects/doAsap/aSapData/Current3.txt";
+	private String current = "D:/Documents/00_projekty/doAsapVer2/aSapData/Current3.txt";
+	//private String current = "C:/Users/marcin.kuciak/Documents/workIT_projects/doAsap/aSapData/Current3.txt";
 	
 	private Object[][] dane = null;
 	
@@ -99,7 +99,7 @@ public class MainTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int arg0, int arg1) {
-		if (arg0<=getRowCount()) return dane[arg0][arg1];
+		if (arg0<=getRowCount() && arg1<=getColumnCount()) return dane[arg0][arg1];
 		else return "";
 	}
 	
