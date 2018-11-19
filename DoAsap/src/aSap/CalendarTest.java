@@ -34,9 +34,9 @@ public class CalendarTest {
 		  return ldni[month];
 	  }
 	  
-	  public String getCalendarInput(int year, int month, int dayNo) {
+	  public String getCalendarInput(int dayNo) {
 		  String CalendarOutput ="";
-		  kalend.set(rok, mies);
+		  kalend.set(rok, mies, dayNo);
 		  
 		  return CalendarOutput;
 	  }
