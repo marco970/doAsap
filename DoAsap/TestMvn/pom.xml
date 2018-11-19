@@ -1,0 +1,13 @@
+<project>		
+	<properties>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+	</properties>
+
+	<name>TestMvn</name>
+	<groupId>pl.mk</groupId>
+	<artifactId>TestMvn</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
+</project>
