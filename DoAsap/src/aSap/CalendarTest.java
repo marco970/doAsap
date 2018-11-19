@@ -21,7 +21,7 @@ public class CalendarTest {
 	  int rok;
 	  int mies;
 
-	  CalendarTest(int rok, int mies) {
+	  public CalendarTest(int rok, int mies) {
 	     this.rok = rok;
 	     this.mies = mies - 1;
 	     //kalend.set(rok, mies);
@@ -30,10 +30,20 @@ public class CalendarTest {
 	    	 System.out.println("dziś jest: "+i+ " "+nazwaMies[mies]+ " roku "+rok+" "+nazwaDnia[kalend.get(Calendar.DAY_OF_WEEK)-1]);
 	     }
 	  }
+	  public int getDayNo(int month)	{
+		  return ldni[month];
+	  }
+	  
+	  public String getCalendarInput(int year, int month, int dayNo) {
+		  String CalendarOutput ="";
+		  kalend.set(rok, mies);
+		  
+		  return CalendarOutput;
+	  }
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new CalendarTest(2018, 2);
+		CalendarTest ct = new CalendarTest(2018, 2);
 	}
 
 }
